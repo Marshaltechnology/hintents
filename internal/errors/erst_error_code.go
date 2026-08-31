@@ -4,50 +4,50 @@
 package errors
 
 import (
-    stdErrors "errors"
-    "fmt"
-    "strings"
+	stdErrors "errors"
+	"fmt"
+	"strings"
 )
 
 // ErstErrorCode is a unified error code type for RPC and Simulator boundaries.
 type ErstErrorCode string
 
 const (
-    // General
-    ErstUnknown          ErstErrorCode = "UNKNOWN"
-    ErstValidationFailed ErstErrorCode = "VALIDATION_FAILED"
-    ErstConfigFailed     ErstErrorCode = "CONFIG_ERROR"
-    // RPC
-    ErstRPCConnectionFailed ErstErrorCode = "RPC_CONNECTION_FAILED"
-    ErstRPCTimeout          ErstErrorCode = "RPC_TIMEOUT"
-    ErstAllRPCFailed        ErstErrorCode = "ALL_RPC_FAILED"
-    ErstRPCError            ErstErrorCode = "RPC_ERROR"
-    // Simulator
-    ErstSimulatorNotFound    ErstErrorCode = "SIMULATOR_NOT_FOUND"
-    ErstSimulationFailed     ErstErrorCode = "SIMULATION_FAILED"
-    ErstSimCrash             ErstErrorCode = "SIMULATOR_CRASH"
-    ErstSimulationLogicError ErstErrorCode = "SIMULATION_LOGIC_ERROR"
-    // Ledger/Network
-    ErstLedgerNotFound  ErstErrorCode = "LEDGER_NOT_FOUND"
-    ErstLedgerArchived  ErstErrorCode = "LEDGER_ARCHIVED"
-    ErstInvalidNetwork  ErstErrorCode = "INVALID_NETWORK"
-    ErstNetworkNotFound ErstErrorCode = "NETWORK_NOT_FOUND"
-    // Rate limiting
-    ErstRateLimitExceeded ErstErrorCode = "RATE_LIMIT_EXCEEDED"
-    // Auth
-    ErstTransactionNotFound ErstErrorCode = "TRANSACTION_NOT_FOUND"
-    ErstUnauthorized        ErstErrorCode = "UNAUTHORIZED"
+	// General
+	ErstUnknown              ErstErrorCode = "UNKNOWN"
+	ErstValidationFailed     ErstErrorCode = "VALIDATION_FAILED"
+	ErstConfigFailed         ErstErrorCode = "CONFIG_ERROR"
+	// RPC
+	ErstRPCConnectionFailed  ErstErrorCode = "RPC_CONNECTION_FAILED"
+	ErstRPCTimeout           ErstErrorCode = "RPC_TIMEOUT"
+	ErstAllRPCFailed         ErstErrorCode = "ALL_RPC_FAILED"
+	ErstRPCError             ErstErrorCode = "RPC_ERROR"
+	// Simulator
+	ErstSimulatorNotFound    ErstErrorCode = "SIMULATOR_NOT_FOUND"
+	ErstSimulationFailed     ErstErrorCode = "SIMULATION_FAILED"
+	ErstSimCrash             ErstErrorCode = "SIMULATOR_CRASH"
+	ErstSimulationLogicError ErstErrorCode = "SIMULATION_LOGIC_ERROR"
+	// Ledger/Network
+	ErstLedgerNotFound       ErstErrorCode = "LEDGER_NOT_FOUND"
+	ErstLedgerArchived       ErstErrorCode = "LEDGER_ARCHIVED"
+	ErstInvalidNetwork       ErstErrorCode = "INVALID_NETWORK"
+	ErstNetworkNotFound      ErstErrorCode = "NETWORK_NOT_FOUND"
+	// Rate limiting
+	ErstRateLimitExceeded    ErstErrorCode = "RATE_LIMIT_EXCEEDED"
+	// Auth
+	ErstTransactionNotFound  ErstErrorCode = "TRANSACTION_NOT_FOUND"
+	ErstUnauthorized         ErstErrorCode = "UNAUTHORIZED"
 )
 
 // ErstError wraps an error with a standardized code and preserves the original error string.
 type ErstError struct {
-    Code    ErstErrorCode
-    Message string // human-readable message
-    OrigErr error  // original error
-    // Context details for enhanced Ipc error reporting
-    LineNumber int   // line number in the validation source, 0 if unknown
-    ValidationPath string // path that failed validation
-    Suggestions []string // possible fixes or suggestions
+	Code           ErstErrorCode
+	Message        string // human-readable message
+	OrigErr        error  // original error
+	// Context details for enhanced IPC error reporting
+	LineNumber     int      // line number in the validation source, 0 if unknown
+	ValidationPath string   // path that failed validation
+	Suggestions    []string // possible fixes or suggestions
 }
 
 func (e *ErstError) Error() string {
@@ -90,7 +90,7 @@ func (e *ErstError) Is(target error) bool {
 }
 
 // WithContext adds details to the error for enhanced reporting. It mutates the receiver
-// and returns it for chrining.
+// and returns it for chaining.
 func (e *ErstError) WithContext(line int, path string, suggestions []string) *ErstError {
 	if e == nil {
 		return nil
@@ -105,12 +105,11 @@ func (e *ErstError) WithContext(line int, path string, suggestions []string) *Er
 var errorCodeRegistry = map[error]ErstErrorCode{
 	ErrTransactionNotFound:  ErstTransactionNotFound,
 	ErrRPCConnectionFailed:  ErstRPCConnectionFailed,
-	ErrRPCTimeout:          ErstRPCTimeout,
-	ErrAllRPCFailed:
-        ErstAllRPCFailed,
+	ErrRPCTimeout:           ErstRPCTimeout,
+	ErrAllRPCFailed:         ErstAllRPCFailed,
 	ErrSimulatorNotFound:    ErstSimulatorNotFound,
 	ErrSimulationFailed:     ErstSimulationFailed,
-	ErrSimCrash:            ErstSimCrash,
+	ErrSimCrash:             ErstSimCrash,
 	ErrInvalidNetwork:       ErstInvalidNetwork,
 	ErrMarshalFailed:        ErstValidationFailed,
 	ErrUnmarshalFailed:      ErstValidationFailed,
@@ -119,22 +118,14 @@ var errorCodeRegistry = map[error]ErstErrorCode{
 	ErrValidationFailed:     ErstValidationFailed,
 	ErrProtocolUnsupported:  ErstValidationFailed,
 	ErrArgumentRequired:     ErstValidationFailed,
-	ErrAuditLogInvalid:
-        ErstValidationFailed,
-	ErrSessionNotFound:
-        ErstValidationFailed,
-	ErrUnauthorized:
-        ErstUnauthorized,
-	ErrLedgerNotFound:
-        ErstLedgerNotFound,
-	ErrLedgerArchived:
-        ErstLedgerArchived,
-	ErrRateAndLimitExceeded:
-        ErstRateLimitExceeded,
-	ErrConfigFailed:
-        ErstConfigFailed,
-	ErrNetworkNotFound:
-        ErstNetworkNotFound,
+	ErrAuditLogInvalid:      ErstValidationFailed,
+	ErrSessionNotFound:      ErstValidationFailed,
+	ErrUnauthorized:         ErstUnauthorized,
+	ErrLedgerNotFound:       ErstLedgerNotFound,
+	ErrLedgerArchived:       ErstLedgerArchived,
+	ErrRateLimitExceeded:    ErstRateLimitExceeded,
+	ErrConfigFailed:         ErstConfigFailed,
+	ErrNetworkNotFound:      ErstNetworkNotFound,
 }
 
 // ClassifyError maps an error to an ErstError with a code and preserves the original error string.
