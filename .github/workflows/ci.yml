@@ -177,6 +177,9 @@ jobs:
           cache: true
           cache-dependency-path: go.sum
 
+      - name: Build erst binary for integration tests
+        run: go build -o erst ./cmd/erst
+
       - name: Run CLI integration suite via os/exec
         run: go test -v ./tests -run TestErstBinaryFullCLISurface -count=1
 
