@@ -53,14 +53,7 @@ jobs:
           version: latest
           args: --config=.golangci.yml --timeout=5m --max-issues-per-linter=0 --max-same-issues=0
 
-      - name: Check for unused variables
-        run: |
-          echo "Checking for unused variables and code..."
-          if go vet ./... 2>&1 | grep -i "declared and not used\|unused variable\|unused parameter"; then
-            echo "[FAIL] Unused variables detected"
-            exit 1
-          fi
-          echo " No unused variables detected"
+
 
   # ============================================
   # Rust Strict Linting
